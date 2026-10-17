@@ -8,7 +8,7 @@ A Discourse theme component that puts **anonist**, the community mascot, in the 
 
 | Idle | Search field in focus |
 |---|---|
-| ![anonist in the header search](docs/screenshots/mascot-header.png) | ![anonist looking at the field](docs/screenshots/mascot-header-focus.png) |
+| ![anonist in the search field](docs/screenshots/mascot-search.png) | ![anonist looking at the field](docs/screenshots/mascot-search-focus.png) |
 
 ## What it does
 

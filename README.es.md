@@ -8,7 +8,7 @@ Componente de tema para Discourse que pone a **anonist**, la mascota de la comun
 
 | En reposo | Buscador con foco |
 |---|---|
-| ![anonist en el buscador del encabezado](docs/screenshots/mascot-header.png) | ![anonist mirando el buscador](docs/screenshots/mascot-header-focus.png) |
+| ![anonist en el buscador](docs/screenshots/mascot-search.png) | ![anonist mirando el buscador](docs/screenshots/mascot-search-focus.png) |
 
 ## Qué hace
 

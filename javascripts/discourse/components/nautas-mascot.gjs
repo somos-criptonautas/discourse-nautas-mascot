@@ -84,8 +84,8 @@ const NautasMascot = <template>
     >
       {{#each FRAMES as |frame|}}
         <g class="nautas-mascot__frame nautas-mascot__frame--{{frame.name}}">
-          {{#each frame.paths as |path|}}
-            <path fill={{path.fill}} d={{path.d}} />
+          {{#each frame.paths as |shape|}}
+            <path fill={{shape.fill}} d={{shape.d}} />
           {{/each}}
         </g>
       {{/each}}

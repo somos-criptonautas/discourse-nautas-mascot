@@ -31,3 +31,10 @@ docs/                                          ← frame sheet and sprite (art s
 Screenshots in `docs/screenshots/` come from `spec/system/screenshots_spec.rb` via Actions → Screenshots; regular CI skips that spec.
 
 Add conventions and gotchas you discover to this file, in the same PR.
+
+## Gotchas
+
+- In `.gjs` templates a block param named like an HTML/SVG tag turns that tag into a component call: `{{#each paths as |path|}}<path />` crashes the whole search menu. Never name block params after tags.
+- QUnit does not load theme CSS, so `isVisible()` is meaningless there; assert the `hidden` attribute instead. On `/` only the welcome-banner search exists; the header field appears once the banner scrolls away.
+- System specs run with `Capybara.disable_animation`, so any frame shown only by a keyframe disappears in screenshots; the idle frame keeps `opacity: 1` at rest. On Horizon's `/` the search is the welcome-banner one.
+- To run CI locally: the `discourse/discourse_test:slim-browsers` image (what [dv](https://github.com/discourse/dv) builds on) with the steps of `discourse/.github`'s `discourse-theme.yml`; set `CI=1` so Chrome starts with `--no-sandbox`.

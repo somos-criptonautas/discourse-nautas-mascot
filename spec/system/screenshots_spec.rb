@@ -18,18 +18,19 @@ RSpec.describe "Screenshots" do
     path = Rails.root.join("tmp/capybara/screenshots/#{name}.png")
     FileUtils.mkdir_p(path.dirname)
     page.driver.with_playwright_page do |pw|
-      pw.screenshot(path: path.to_s, clip: { x: 0, y: 0, width: 1280, height: 120 })
+      pw.locator(".search-input--welcome-banner").screenshot(path: path.to_s)
     end
   end
 
-  it "shows the mascot in the header search" do
+  # Horizon's home page shows the welcome-banner search; the header one appears only after scrolling.
+  it "shows the mascot in the search field" do
     resize_window(width: 1280, height: 900) do
       visit "/"
-      expect(page).to have_css(".search-input--header .nautas-mascot")
-      save("mascot-header")
-      find("#header-search-input").click
+      expect(page).to have_css(".search-input--welcome-banner .nautas-mascot:not([hidden])")
+      save("mascot-search")
+      find("#welcome-banner-search-input").click
       expect(page).to have_css(".nautas-mascot--look")
-      save("mascot-header-focus")
+      save("mascot-search-focus")
     end
   end
 end

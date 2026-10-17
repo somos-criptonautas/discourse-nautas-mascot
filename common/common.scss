@@ -47,8 +47,9 @@ $cycle: 6s;
     opacity: 0;
   }
 
-  // idle: breathe and blink now and then
+  // idle: breathe and blink now and then; shown at rest so it stays visible without animations
   &__frame--idle {
+    opacity: 1;
     animation: nautas-mascot-idle $cycle steps(1, end) infinite;
   }
 
