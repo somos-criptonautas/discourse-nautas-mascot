@@ -1,0 +1,10 @@
+{
+  "name": "Nautas Mascot",
+  "description": "anonist, the community mascot, next to the search field: it breathes, looks at what you type, thinks while searching and winks when results arrive.",
+  "authors": "satonotdead",
+  "about_url": "https://github.com/somos-criptonautas/discourse-nautas-mascot",
+  "license_url": "https://github.com/somos-criptonautas/discourse-nautas-mascot/blob/main/LICENSE",
+  "learn_more": "https://meta.discourse.org/t/installing-a-theme-or-theme-component/63682",
+  "theme_version": "1.0.0",
+  "component": true
+}

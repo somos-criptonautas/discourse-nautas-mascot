@@ -1,0 +1,14 @@
+search_locations:
+  type: list
+  list_type: compact
+  default: "header|welcome-banner"
+  choices:
+    - header
+    - welcome-banner
+mascot_size:
+  type: enum
+  default: "32"
+  choices:
+    - "32"
+    - "40"
+    - "48"

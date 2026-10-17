@@ -1,0 +1,199 @@
+// Frames are stacked in one SVG; each state shows exactly one. Steps only, never tweens.
+$size: #{$mascot_size}px;
+$cycle: 6s;
+
+// the mascot takes the magnifier's place
+.search-input.nautas-mascot-host {
+  position: relative;
+  padding-inline-start: calc(#{$size} + 0.8em);
+}
+
+.search-menu:has(.nautas-mascot-host) > .search-icon {
+  display: none;
+}
+
+// the mascot already shows the search is running
+.search-menu-container.loading .nautas-mascot-host > .searching:has(.spinner) {
+  display: none;
+}
+
+.nautas-mascot {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0.4em;
+  inline-size: $size;
+  block-size: $size;
+  translate: 0 -50%;
+  pointer-events: none;
+  z-index: 1;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__art {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+  }
+
+  &__frame {
+    opacity: 0;
+  }
+
+  &__dot {
+    fill: var(--tertiary);
+    opacity: 0;
+  }
+
+  // idle: breathe and blink now and then
+  &__frame--idle {
+    animation: nautas-mascot-idle $cycle steps(1, end) infinite;
+  }
+
+  &__frame--breathe {
+    animation: nautas-mascot-breathe $cycle steps(1, end) infinite;
+  }
+
+  &__frame--blink {
+    animation: nautas-mascot-blink $cycle steps(1, end) infinite;
+  }
+
+  // any state stops the idle loop and shows its own frame
+  &--look,
+  &--think,
+  &--wink {
+    .nautas-mascot__frame {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  &--look .nautas-mascot__frame--look {
+    opacity: 1;
+  }
+
+  &--look.nautas-mascot--nod .nautas-mascot__frame--look {
+    translate: 0 calc(100% / 32);
+  }
+
+  &--think {
+    .nautas-mascot__frame--look {
+      opacity: 0;
+    }
+
+    .nautas-mascot__frame--think {
+      opacity: 1;
+    }
+
+    .nautas-mascot__dot {
+      animation: nautas-mascot-dot 1.2s steps(1, end) infinite;
+
+      &:nth-of-type(2) {
+        animation-delay: 0.3s;
+      }
+
+      &:nth-of-type(3) {
+        animation-delay: 0.6s;
+      }
+    }
+  }
+
+  &--wink {
+    .nautas-mascot__frame--look,
+    .nautas-mascot__frame--think,
+    .nautas-mascot__dot {
+      opacity: 0;
+      animation: none;
+    }
+
+    .nautas-mascot__frame--wink {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__frame--breathe,
+    &__frame--blink {
+      animation: none;
+    }
+
+    &__frame--idle {
+      animation: none;
+      opacity: 1;
+    }
+
+    &--look,
+    &--think,
+    &--wink {
+      .nautas-mascot__frame--idle {
+        opacity: 0;
+      }
+    }
+
+    &--think .nautas-mascot__dot {
+      animation: none;
+      opacity: 1;
+    }
+
+    &--look.nautas-mascot--nod .nautas-mascot__frame--look {
+      translate: none;
+    }
+  }
+}
+
+@keyframes nautas-mascot-idle {
+  0%,
+  85% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0;
+  }
+
+  92% {
+    opacity: 0;
+  }
+
+  95% {
+    opacity: 1;
+  }
+}
+
+@keyframes nautas-mascot-breathe {
+  0%,
+  85% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes nautas-mascot-blink {
+  0%,
+  95% {
+    opacity: 0;
+  }
+
+  92% {
+    opacity: 1;
+  }
+}
+
+@keyframes nautas-mascot-dot {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
