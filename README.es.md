@@ -12,13 +12,13 @@ Componente de tema para Discourse que pone a **anonist**, la mascota de la comun
 
 ## Qué hace
 
-anonist se para junto al buscador, por fuera, y se mueve en pasos, estilo 8 bits. El buscador conserva su lupa.
+anonist se para junto al buscador, por fuera, y se mueve en pasos, estilo 8 bits. El buscador conserva su lupa. Su buzo toma el tono medio del tema, así encaja en esquemas claros y oscuros.
 
 | Cuándo | Cuadro |
 |---|---|
 | No pasa nada | respira (sube un píxel) y pestañea cada tanto |
 | Al cargar y cada ~20 s, banner de bienvenida | camina sobre el borde superior del buscador y vuelve |
-| Al cargar y cada ~20 s, encabezado | salta tres pasos a la derecha, tres de vuelta y mira el buscador |
+| Al cargar y cada ~20 s, encabezado | se para a la derecha del buscador sobre un piso tenue, salta tres pasos a la derecha, tres de vuelta y mira el buscador |
 | El buscador recibe foco | mira lo que escribes |
 | Haces una pausa al escribir | asiente un píxel |
 | La búsqueda está corriendo | piensa, con tres puntos que se encienden |

@@ -19,6 +19,8 @@ PALETTE = {
     "k": "#2A2622",  # hood shade
     "s": "#14110F",  # shoes
 }
+# colors the theme recolors (the fills above stay as the fallback for the sprite and sheet)
+CLASSES = {"h": "nautas-mascot__hood", "k": "nautas-mascot__hood-shade"}
 
 # left half of the mask (12 cols); mirrored to 24
 MASK_HALF = [
@@ -141,6 +143,20 @@ def legs(grid, kind):
                 grid[foot][x] = "s"
 
 
+def salute(grid, dy):
+    """His right arm (the viewer's left) up from the shoulder, hand flat over the brow."""
+    for y in range(9 + dy, 33):
+        for x in range(8, 13):
+            grid[y][x] = "#" if x in (8, 12) else "h"
+    for y in range(7 + dy, 11 + dy):
+        for x in range(8, 21):
+            grid[y][x] = "#" if y in (7 + dy, 10 + dy) or x in (8, 20) else "h"
+    # shoulder, joining the arm to the torso
+    for y in range(28 + dy, 33):
+        for x in range(12, 17):
+            grid[y][x] = "#" if y == 32 else "h"
+
+
 FRAMES = {
     "idle": dict(eyes="open", legs="stand"),
     "breathe": dict(eyes="open", legs="stand", dy=1),
@@ -152,21 +168,24 @@ FRAMES = {
     "walk-b": dict(eyes="open", legs="step-b", dy=1),
     "crouch": dict(eyes="shut", legs="crouch", dy=2),
     "air": dict(eyes="open", legs="air"),
+    "salute": dict(eyes="wink", legs="stand", arm=True),
 }
 
 
-def frame(eyes, legs_kind, dy=0):
+def frame(eyes, legs_kind, dy=0, arm=False):
     g = blank()
     legs(g, legs_kind)
     body(g, dy)
     hood(g, dy)
     put(g, mask(eyes), 12, 2 + dy)
+    if arm:
+        salute(g, dy)
     return g
 
 
 def grids():
     return {
-        name: frame(f["eyes"], f["legs"], f.get("dy", 0))
+        name: frame(f["eyes"], f["legs"], f.get("dy", 0), f.get("arm", False))
         for name, f in FRAMES.items()
     }
 
@@ -215,9 +234,9 @@ def paths(grid):
             while end < SIZE and line[end] == ch:
                 end += 1
             if ch != ".":
-                runs.setdefault(PALETTE[ch], []).append(f"M{x} {y}h{end - x}v1h-{end - x}z")
+                runs.setdefault(ch, []).append(f"M{x} {y}h{end - x}v1h-{end - x}z")
             x = end
-    return [(fill, "".join(d)) for fill, d in runs.items()]
+    return [(PALETTE[ch], "".join(d), CLASSES.get(ch)) for ch, d in runs.items()]
 
 
 def write_js(path):
@@ -227,8 +246,9 @@ def write_js(path):
     ]
     for name, grid in grids().items():
         out.append(f'  {{\n    name: "{name}",\n    paths: [')
-        for fill, d in paths(grid):
-            out.append(f'      {{\n        fill: "{fill}",\n        d: "{d}",\n      }},')
+        for fill, d, cls in paths(grid):
+            cls_line = f'\n        class: "{cls}",' if cls else ""
+            out.append(f'      {{\n        fill: "{fill}",{cls_line}\n        d: "{d}",\n      }},')
         out.append("    ],\n  },")
     out.append("];\n")
     out.append(f"export const DOTS = {DOTS};")
@@ -238,7 +258,7 @@ def write_js(path):
 def write_sprite(path):
     symbols = []
     for name, grid in grids().items():
-        body = "".join(f'<path fill="{fill}" d="{d}"/>' for fill, d in paths(grid))
+        body = "".join(f'<path fill="{fill}" d="{d}"/>' for fill, d, _ in paths(grid))
         symbols.append(
             f'<symbol id="anonist-48-{name}" viewBox="0 0 48 48" shape-rendering="crispEdges">{body}</symbol>'
         )

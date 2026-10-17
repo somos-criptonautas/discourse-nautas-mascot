@@ -6,6 +6,7 @@ const NOD_FOR_MS = 220;
 const WINK_FOR_MS = 900;
 const MOVE_EVERY_MS = 20000;
 const LOOK_AFTER_HOP_MS = 1500;
+const SALUTE_FOR_MS = 1400;
 // keep in sync with the walk and hop animations in common.scss
 const MOVES = {
   header: { name: "hop", ms: 2340 },
@@ -59,6 +60,15 @@ const watchSearch = modifier((element) => {
     }, move.ms);
   };
 
+  // easter egg: a salute when clicked; kept off the search menu's own click handling
+  const onClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    set(move.name, false);
+    set("salute", true);
+    later(() => set("salute", false), SALUTE_FOR_MS);
+  };
+
   let pause;
   const onFocus = () => {
     set(move.name, false);
@@ -84,6 +94,7 @@ const watchSearch = modifier((element) => {
     wasLoading = loading;
   });
 
+  element.addEventListener("click", onClick);
   input?.addEventListener("focus", onFocus);
   input?.addEventListener("blur", onBlur);
   input?.addEventListener("input", onInput);
@@ -94,6 +105,7 @@ const watchSearch = modifier((element) => {
   const every = setInterval(routine, MOVE_EVERY_MS);
 
   return () => {
+    element.removeEventListener("click", onClick);
     input?.removeEventListener("focus", onFocus);
     input?.removeEventListener("blur", onBlur);
     input?.removeEventListener("input", onInput);
@@ -115,7 +127,7 @@ const NautasMascot = <template>
       {{#each FRAMES as |frame|}}
         <g class="nautas-mascot__frame nautas-mascot__frame--{{frame.name}}">
           {{#each frame.paths as |shape|}}
-            <path fill={{shape.fill}} d={{shape.d}} />
+            <path class={{shape.class}} fill={{shape.fill}} d={{shape.d}} />
           {{/each}}
         </g>
       {{/each}}

@@ -1,4 +1,4 @@
-import { visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
@@ -14,6 +14,15 @@ acceptance("Nautas Mascot", function () {
     assert
       .dom(".search-input--welcome-banner .nautas-mascot")
       .hasClass("nautas-mascot--walk", "walks in place when it appears");
+  });
+
+  test("salutes when clicked", async function (assert) {
+    await visit("/");
+    await click(".search-input--welcome-banner .nautas-mascot__art");
+    assert
+      .dom(".search-input--welcome-banner .nautas-mascot")
+      .hasClass("nautas-mascot--salute")
+      .doesNotHaveClass("nautas-mascot--walk", "the salute stops the walk");
   });
 
   test("stays hidden where the setting leaves it out", async function (assert) {

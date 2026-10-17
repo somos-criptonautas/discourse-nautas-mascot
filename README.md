@@ -12,13 +12,13 @@ A Discourse theme component that puts **anonist**, the community mascot, in the 
 
 ## What it does
 
-anonist stands next to the field, outside it, and moves in steps, 8-bit style. The field keeps its magnifier.
+anonist stands next to the field, outside it, and moves in steps, 8-bit style. The field keeps its magnifier. His hoodie takes the theme's mid tone, so it fits light and dark color schemes.
 
 | When | Frame |
 |---|---|
 | Nothing happens | breathes (up one pixel) and blinks now and then |
 | On load and every ~20 s, welcome banner | walks along the field's top border and back |
-| On load and every ~20 s, header | hops three steps right, three back, then looks at the field |
+| On load and every ~20 s, header | stands right of the field on a faint floor, hops three steps right, three back, then looks at the field |
 | The field gets focus | looks at what you type |
 | You pause while typing | nods one pixel |
 | The search is running | thinks, with three dots lighting up |
