@@ -18,7 +18,15 @@ RSpec.describe "Screenshots" do
     path = Rails.root.join("tmp/capybara/screenshots/#{name}.png")
     FileUtils.mkdir_p(path.dirname)
     page.driver.with_playwright_page do |pw|
-      pw.locator(".search-input--welcome-banner").screenshot(path: path.to_s)
+      # the field plus the space above it, where anonist stands
+      box = pw.locator(".search-input--welcome-banner").bounding_box
+      clip = {
+        x: box["x"] - 8,
+        y: box["y"] - 56,
+        width: box["width"] + 16,
+        height: box["height"] + 64,
+      }
+      pw.screenshot(path: path.to_s, clip: clip)
     end
   end
 
@@ -27,6 +35,7 @@ RSpec.describe "Screenshots" do
     resize_window(width: 1280, height: 900) do
       visit "/"
       expect(page).to have_css(".search-input--welcome-banner .nautas-mascot:not([hidden])")
+      expect(page).to have_no_css(".nautas-mascot--walk") # animations are off in specs
       save("mascot-search")
       find("#welcome-banner-search-input").click
       expect(page).to have_css(".nautas-mascot--look")

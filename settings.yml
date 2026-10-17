@@ -7,7 +7,7 @@ search_locations:
     - welcome-banner
 mascot_size:
   type: enum
-  default: "32"
+  default: "48"
   choices:
     - "32"
     - "40"

@@ -11,6 +11,9 @@ acceptance("Nautas Mascot", function () {
       .dom(".search-input--welcome-banner .nautas-mascot")
       .doesNotHaveAttribute("hidden");
     assert.dom(".search-input--welcome-banner.nautas-mascot-host").exists();
+    assert
+      .dom(".search-input--welcome-banner .nautas-mascot")
+      .hasClass("nautas-mascot--walk", "walks in place when it appears");
   });
 
   test("stays hidden where the setting leaves it out", async function (assert) {

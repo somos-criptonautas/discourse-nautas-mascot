@@ -12,11 +12,13 @@ Componente de tema para Discourse que pone a **anonist**, la mascota de la comun
 
 ## Qué hace
 
-anonist ocupa el lugar de la lupa y se mueve en pasos, estilo 8 bits:
+anonist se para junto al buscador, por fuera, y se mueve en pasos, estilo 8 bits. El buscador conserva su lupa.
 
 | Cuándo | Cuadro |
 |---|---|
 | No pasa nada | respira (sube un píxel) y pestañea cada tanto |
+| Al cargar y cada ~20 s, banner de bienvenida | camina sobre el borde superior del buscador y vuelve |
+| Al cargar y cada ~20 s, encabezado | salta tres pasos a la derecha, tres de vuelta y mira el buscador |
 | El buscador recibe foco | mira lo que escribes |
 | Haces una pausa al escribir | asiente un píxel |
 | La búsqueda está corriendo | piensa, con tres puntos que se encienden |
@@ -29,7 +31,7 @@ Con *reducir movimiento* activado en el sistema, queda quieta y solo cambia de c
 | Ajuste | Por defecto | Qué hace |
 |---|---|---|
 | `search_locations` | `header`, `welcome-banner` | Buscadores donde aparece la mascota |
-| `mascot_size` | `32` | Tamaño en píxeles; 32 es el tamaño del dibujo |
+| `mascot_size` | `48` | Tamaño en píxeles; 48 es el tamaño del dibujo |
 
 ## Instalación
 

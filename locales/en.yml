@@ -3,4 +3,4 @@ en:
     description: "anonist, the community mascot, next to the search field."
     settings:
       search_locations: "Search fields that show the mascot. header is the header search; welcome-banner is the search in the welcome banner."
-      mascot_size: "Mascot size in pixels. 32 is the drawing's own size and the sharpest."
+      mascot_size: "Mascot size in pixels. 48 is the drawing's own size and the sharpest."

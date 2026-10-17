@@ -3,4 +3,4 @@ es:
     description: "anonist, la mascota de la comunidad, al lado del buscador."
     settings:
       search_locations: "Buscadores donde aparece la mascota. header es el buscador del encabezado; welcome-banner es el del banner de bienvenida."
-      mascot_size: "Tamaño de la mascota en píxeles. 32 es el tamaño del dibujo y el más nítido."
+      mascot_size: "Tamaño de la mascota en píxeles. 48 es el tamaño del dibujo y el más nítido."
