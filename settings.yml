@@ -7,11 +7,13 @@ search_locations:
     - welcome-banner
 mascot_size:
   type: enum
-  default: "48"
+  # integers, not strings: the admin dropdown casts choices to integers, so string ones never
+  # match the saved value and it shows empty
+  default: 48
   choices:
-    - "32"
-    - "40"
-    - "48"
+    - 32
+    - 40
+    - 48
 mascot_style:
   type: enum
   default: figure
