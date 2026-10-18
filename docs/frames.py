@@ -127,6 +127,8 @@ LEGS = {
     "step-b": ((19, 4), (24, 5)),
     "crouch": ((17, 3), (26, 3)),
     "air": ((19, 3), (24, 3)),
+    # sitting on a ledge at row 41: legs hang over it, a little apart
+    "dangle": ((16, 6), (27, 6)),
 }
 
 
@@ -157,6 +159,19 @@ def salute(grid, dy):
             grid[y][x] = "#" if y == 32 else "h"
 
 
+def scratch(grid, dy, shift):
+    """His right arm up the side of the hood, hand over the top; shift reaches further to scratch."""
+    for y in range(6 + dy, 33):
+        for x in range(4, 9):
+            grid[y][x] = "#" if x in (4, 8) else "h"
+    for y in range(dy, 5 + dy):
+        for x in range(4, 21 + shift):
+            grid[y][x] = "#" if y in (dy, 4 + dy) or x in (4, 20 + shift) else "h"
+    for y in range(28 + dy, 33):
+        for x in range(8, 17):
+            grid[y][x] = "#" if y == 32 else "h"
+
+
 FRAMES = {
     "idle": dict(eyes="open", legs="stand"),
     "breathe": dict(eyes="open", legs="stand", dy=1),
@@ -169,10 +184,14 @@ FRAMES = {
     "crouch": dict(eyes="shut", legs="crouch", dy=2),
     "air": dict(eyes="open", legs="air"),
     "salute": dict(eyes="wink", legs="stand", arm=True),
+    "sit": dict(eyes="open", legs="dangle"),
+    "sit-blink": dict(eyes="shut", legs="dangle"),
+    "scratch-a": dict(eyes="up", legs="dangle", scratch=0),
+    "scratch-b": dict(eyes="up", legs="dangle", scratch=4),
 }
 
 
-def frame(eyes, legs_kind, dy=0, arm=False):
+def frame(eyes, legs_kind, dy=0, arm=False, scratch_shift=None):
     g = blank()
     legs(g, legs_kind)
     body(g, dy)
@@ -180,12 +199,14 @@ def frame(eyes, legs_kind, dy=0, arm=False):
     put(g, mask(eyes), 12, 2 + dy)
     if arm:
         salute(g, dy)
+    if scratch_shift is not None:
+        scratch(g, dy, scratch_shift)
     return g
 
 
 def grids():
     return {
-        name: frame(f["eyes"], f["legs"], f.get("dy", 0), f.get("arm", False))
+        name: frame(f["eyes"], f["legs"], f.get("dy", 0), f.get("arm", False), f.get("scratch"))
         for name, f in FRAMES.items()
     }
 

@@ -41,4 +41,5 @@ Add conventions and gotchas you discover to this file, in the same PR.
 - The hoodie pixels carry `nautas-mascot__hood`/`__hood-shade` classes (from `CLASSES` in `docs/frames.py`); CSS recolors them with `--primary-medium`, the `fill` is only the sprite's fallback.
 - The salute click is stopped from propagating, so it doesn't open the search menu; it stays an easter egg (no pointer cursor, still `aria-hidden`).
 - Walk and hop durations live in both `common.scss` (`$walk-step`, `$hop-step`) and `MOVES` in the component; change them together.
+- `sit`, `sit-blink` and `scratch-a`/`-b` are drawn for the community-sidebar mascot of `somos-criptonautas/ghost-headline-theme-nautas`, which copies `docs/anonist-sprite.svg` to its `assets/images/`; this component doesn't show them. Copy the sprite there again after changing frames.
 - To run CI locally: the `discourse/discourse_test:slim-browsers` image (what [dv](https://github.com/discourse/dv) builds on) with the steps of `discourse/.github`'s `discourse-theme.yml`; set `CI=1` so Chrome starts with `--no-sandbox`.
