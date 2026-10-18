@@ -10,19 +10,24 @@ A Discourse theme component that puts **anonist**, the community mascot, in the 
 |---|---|
 | ![anonist in the search field](docs/screenshots/mascot-search.png) | ![anonist looking at the field](docs/screenshots/mascot-search-focus.png) |
 
+The `mask` style: ![anonist's mask floating over the search field](docs/screenshots/mascot-mask-search.png)
+
 ## What it does
 
-anonist stands next to the field, outside it, and moves in steps, 8-bit style. The field keeps its magnifier. His hoodie takes the theme's mid tone, so it fits light and dark color schemes.
+anonist stands next to the field, outside it with a clear 8 px gap (the banner field makes room for him above it), and moves in steps, 8-bit style. The field keeps its magnifier. His hoodie takes the theme's mid tone, so it fits light and dark color schemes.
 
 | When | Frame |
 |---|---|
 | Nothing happens | breathes (up one pixel) and blinks now and then |
-| On load and every ~20 s, welcome banner | walks along the field's top border and back |
+| On load and every ~20 s, welcome banner | walks above the field, on a faint floor, and back |
 | On load and every ~20 s, header | stands right of the field on a faint floor, hops three steps right, three back, then looks at the field |
+| The cursor is to one side of him | looks toward it |
 | The field gets focus | looks at what you type |
 | You pause while typing | nods one pixel |
 | The search is running | thinks, with three dots lighting up |
 | Results arrive | winks |
+
+With `mascot_style` set to `mask`, only his mask shows, floating: it bobs over a faint shadow, glides along above the banner field and back, or drifts right and back beside the header one, with sparkles while it moves. The faces for each state are the same.
 
 With *reduce motion* turned on in the system, it stays still and only changes frame on state changes.
 
@@ -32,6 +37,7 @@ With *reduce motion* turned on in the system, it stays still and only changes fr
 |---|---|---|
 | `search_locations` | `header`, `welcome-banner` | Search fields that show the mascot |
 | `mascot_size` | `48` | Size in pixels; 48 is the drawing's own size |
+| `mascot_style` | `figure` | `figure`: anonist whole, walking and hopping; `mask`: only his mask, floating |
 
 ## Install
 

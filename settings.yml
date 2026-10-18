@@ -12,3 +12,9 @@ mascot_size:
     - "32"
     - "40"
     - "48"
+mascot_style:
+  type: enum
+  default: figure
+  choices:
+    - figure
+    - mask

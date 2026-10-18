@@ -5,21 +5,48 @@ $px: calc(#{$size} / 48); // one pixel of the 48×48 drawing
 $walk-step: 0.16s; // keep $walk-step × 20 and $hop-step × 18 in sync with MOVES in the component
 $hop-step: 0.13s;
 
+// the mask style: keep $orbit-step × 20, $drift-step × 6 and $spin-step × 6 in sync with MOVES too
+$bob-step: 0.4s;
+$orbit-step: 0.15s;
+$drift-step: 0.3s;
+$spin-step: 0.18s;
+$gap: var(
+  --space-2
+); // between anonist (his drawn edge, his floor or shadow) and the field
+
 // anonist stands outside the field, which keeps its own magnifier and spinner
 .search-input.nautas-mascot-host {
   position: relative;
 }
 
-// header: a faint floor right of the field, under the hops (static, unlike the mascot)
-.search-input--header.nautas-mascot-host::after {
+// room above the banner field for him, so he never overlaps the banner around it; on the
+// whole search menu, since the field's magnifier is placed from there
+.search-menu:has(.search-input--welcome-banner.nautas-mascot-host) {
+  margin-block-start: calc(#{$size} + #{$gap});
+}
+
+// a faint floor under the figure's walk and hops (static, unlike the mascot): above the banner
+// field, right of the header one; the mask has its own shadow instead
+.search-input.nautas-mascot-host:has(.nautas-mascot--figure)::after {
   content: "";
   position: absolute;
-  inset-block-start: calc(50% + #{$px} * 25);
-  inset-inline-start: calc(100% + #{$px} * 2);
-  inline-size: calc(#{$px} * 60);
   block-size: calc(#{$px} * 2);
   background: var(--primary-low);
   pointer-events: none;
+}
+
+.search-input--welcome-banner.nautas-mascot-host:has(
+    .nautas-mascot--figure
+  )::after {
+  inset-block-end: calc(100% + #{$gap} - #{$px} * 2);
+  inset-inline-start: calc(0.4em + #{$px} * 8);
+  inline-size: calc(#{$px} * 72);
+}
+
+.search-input--header.nautas-mascot-host:has(.nautas-mascot--figure)::after {
+  inset-block-start: calc(50% + #{$px} * 25);
+  inset-inline-start: calc(100% + #{$gap});
+  inline-size: calc(#{$px} * 56);
 }
 
 .nautas-mascot {
@@ -33,17 +60,17 @@ $hop-step: 0.13s;
     display: none;
   }
 
-  // welcome banner: on the field's top border, at its left end
+  // welcome banner: above the field's left end, $gap clear of it
   .search-input--welcome-banner & {
-    inset-block-end: calc(100% - #{$px});
+    inset-block-end: calc(100% + #{$gap});
     inset-inline-start: 0.4em;
   }
 
-  // header: right of the field, facing it, on the floor; centred on the field and 2 px low,
-  // so the 4 px hops stay inside the bar
+  // header: right of the field, facing it, $gap clear of it (the drawing has 8 px of margin);
+  // centred on the field and 2 px low, so the 4 px hops stay inside the bar
   .search-input--header & {
     inset-block-start: calc(50% - #{$size} / 2 + #{$px} * 2);
-    inset-inline-start: calc(100% - #{$px} * 4);
+    inset-inline-start: calc(100% + #{$gap} - #{$px} * 8);
   }
 
   &__art {
@@ -72,9 +99,15 @@ $hop-step: 0.13s;
     opacity: 0;
   }
 
-  &__dot {
+  &__dot,
+  &__spark {
     fill: var(--tertiary);
     opacity: 0;
+  }
+
+  &__shadow {
+    display: none;
+    fill: var(--primary-low);
   }
 
   // idle: breathe and blink now and then; shown at rest so it stays visible without animations
@@ -89,6 +122,39 @@ $hop-step: 0.13s;
 
   &__frame--blink {
     animation: nautas-mascot-blink $cycle steps(1, end) infinite;
+  }
+
+  // mask style: it floats, bobbing 2 px over a shadow that shrinks as it rises, and has no
+  // breathe frame, so its idle only blinks
+  &--mask {
+    .nautas-mascot__float {
+      animation: nautas-mascot-bob $bob-step * 4 steps(1, end) infinite;
+    }
+
+    .nautas-mascot__shadow {
+      display: inline;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: nautas-mascot-shadow $bob-step * 4 steps(1, end) infinite;
+    }
+
+    .nautas-mascot__frame--idle {
+      animation-name: nautas-mascot-idle-blink;
+    }
+  }
+
+  // eyes following the cursor while idle; any state below takes over
+  &--eyes-left,
+  &--eyes-right {
+    .nautas-mascot__frame {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  &--eyes-left .nautas-mascot__frame--eyes-left,
+  &--eyes-right .nautas-mascot__frame--eyes-right {
+    opacity: 1;
   }
 
   // any state stops the idle loop and shows its own frame
@@ -159,6 +225,62 @@ $hop-step: 0.13s;
     }
   }
 
+  // the mask's easter egg: one turn, showing the strap on its back
+  &--spin {
+    .nautas-mascot__frame,
+    .nautas-mascot__dot {
+      animation: none;
+      opacity: 0;
+    }
+
+    .nautas-mascot__frame--idle {
+      animation: nautas-mascot-on $spin-step steps(1, end);
+    }
+
+    .nautas-mascot__frame--turn-a {
+      animation: nautas-mascot-on $spin-step steps(1, end) $spin-step;
+    }
+
+    .nautas-mascot__frame--side {
+      animation:
+        nautas-mascot-on $spin-step steps(1, end) $spin-step * 2,
+        nautas-mascot-on $spin-step steps(1, end) $spin-step * 4;
+    }
+
+    .nautas-mascot__frame--back {
+      animation: nautas-mascot-on $spin-step steps(1, end) $spin-step * 3;
+    }
+
+    .nautas-mascot__frame--turn-b {
+      animation: nautas-mascot-on $spin-step steps(1, end) $spin-step * 5;
+    }
+  }
+
+  // mask routines: along above the banner field and back, right and back in the header;
+  // sparkles blink while it moves
+  &--orbit {
+    animation: nautas-mascot-orbit $orbit-step * 20 steps(1, end);
+  }
+
+  &--drift {
+    animation: nautas-mascot-drift $drift-step * 6 steps(1, end);
+  }
+
+  &--orbit,
+  &--drift {
+    .nautas-mascot__spark {
+      animation: nautas-mascot-dot 0.6s steps(1, end) infinite;
+
+      &:nth-of-type(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-of-type(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+
   // routines: walk in place (welcome banner), hop right and back (header)
   &--walk,
   &--hop {
@@ -199,6 +321,30 @@ $hop-step: 0.13s;
   }
 
   @media (prefers-reduced-motion: reduce) {
+    &--mask {
+      .nautas-mascot__float,
+      .nautas-mascot__shadow {
+        animation: none;
+      }
+    }
+
+    &--orbit,
+    &--drift {
+      animation: none;
+
+      .nautas-mascot__spark {
+        animation: none;
+      }
+    }
+
+    &--spin .nautas-mascot__frame {
+      animation: none;
+    }
+
+    &--spin .nautas-mascot__frame--idle {
+      opacity: 1;
+    }
+
     &--walk,
     &--hop {
       animation: none;
@@ -271,6 +417,18 @@ $hop-step: 0.13s;
   }
 }
 
+// idle for the mask, which has no breathe frame
+@keyframes nautas-mascot-idle-blink {
+  0%,
+  95% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0;
+  }
+}
+
 @keyframes nautas-mascot-blink {
   0%,
   95% {
@@ -293,6 +451,76 @@ $hop-step: 0.13s;
 
   100% {
     opacity: 1;
+  }
+}
+
+// shows a frame for the whole run, for slots set by delays
+@keyframes nautas-mascot-on {
+  0%,
+  100% {
+    opacity: 1;
+  }
+}
+
+// 0, 1, 2, 1 px up; the shadow shrinks as the mask rises
+@keyframes nautas-mascot-bob {
+  0% {
+    translate: 0 0;
+  }
+
+  25%,
+  75% {
+    translate: 0 -1px;
+  }
+
+  50% {
+    translate: 0 -2px;
+  }
+}
+
+@keyframes nautas-mascot-shadow {
+  0% {
+    scale: 1 1;
+  }
+
+  25%,
+  75% {
+    scale: 0.9 1;
+  }
+
+  50% {
+    scale: 0.8 1;
+  }
+}
+
+// 10 steps above the field to its right end, 10 back
+@keyframes nautas-mascot-orbit {
+  @for $i from 0 through 19 {
+    #{$i * 5%} {
+      inset-inline-start: calc(
+        0.4em +
+          (100% - #{$size} + #{$px} * 8 - 0.4em) *
+          #{if($i <= 10, $i, 20 - $i)} /
+          10
+      );
+    }
+  }
+
+  100% {
+    inset-inline-start: 0.4em;
+  }
+}
+
+// 3 steps of 8 px right, then back
+@keyframes nautas-mascot-drift {
+  @for $i from 0 through 5 {
+    #{$i * 16.6667%} {
+      translate: calc(#{$px} * #{if($i <= 3, $i, 6 - $i) * 8}) 0;
+    }
+  }
+
+  100% {
+    translate: 0 0;
   }
 }
 
@@ -327,7 +555,7 @@ $hop-step: 0.13s;
   }
 }
 
-// 10 steps of 4 px right along the top border, then 10 back
+// 10 steps of 4 px right above the field, then 10 back
 @keyframes nautas-mascot-walk {
   @for $i from 0 through 19 {
     #{$i * 5%} {

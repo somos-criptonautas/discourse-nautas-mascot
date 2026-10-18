@@ -42,4 +42,15 @@ RSpec.describe "Screenshots" do
       save("mascot-search-focus")
     end
   end
+
+  it "shows the mask style in the search field" do
+    component.update_setting(:mascot_style, "mask")
+    component.save!
+    resize_window(width: 1280, height: 900) do
+      visit "/"
+      expect(page).to have_css(".search-input--welcome-banner .nautas-mascot--mask")
+      expect(page).to have_no_css(".nautas-mascot--orbit")
+      save("mascot-mask-search")
+    end
+  end
 end
