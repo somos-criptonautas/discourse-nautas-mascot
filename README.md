@@ -29,6 +29,8 @@ anonist stands next to the field, outside it with a clear 8 px gap (the banner f
 
 With `mascot_style` set to `mask`, only his mask shows, floating: it bobs over a faint shadow, glides along above the banner field and back, or drifts right and back beside the header one, with sparkles while it moves. The faces for each state are the same.
 
+Below 1024 px wide (tablets and phones) it's hidden: there's no room for it beside the field.
+
 With *reduce motion* turned on in the system, it stays still and only changes frame on state changes.
 
 ## Settings

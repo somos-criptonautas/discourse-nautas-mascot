@@ -43,6 +43,14 @@ RSpec.describe "Screenshots" do
     end
   end
 
+  it "hides the mascot on tablets, where there's no room for it" do
+    resize_window(width: 800, height: 1000) do
+      visit "/"
+      expect(page).to have_css(".search-input--welcome-banner.nautas-mascot-host")
+      expect(page).to have_no_css(".search-input--welcome-banner .nautas-mascot", visible: true)
+    end
+  end
+
   it "shows the mask style in the search field" do
     component.update_setting(:mascot_style, "mask")
     component.save!

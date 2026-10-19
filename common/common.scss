@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 // Frames are stacked in one SVG; each state shows exactly one. Steps only, never tweens.
 $size: #{$mascot_size}px;
 $cycle: 6s;
@@ -589,5 +591,20 @@ $gap: var(
 
   100% {
     translate: 0 0;
+  }
+}
+
+// no room for him on tablets and phones: hidden, and the banner keeps its own layout
+@include viewport.until(lg) {
+  .nautas-mascot {
+    display: none;
+  }
+
+  .search-menu:has(.search-input--welcome-banner.nautas-mascot-host) {
+    margin-block-start: 0;
+  }
+
+  .search-input.nautas-mascot-host:has(.nautas-mascot--figure)::after {
+    content: none;
   }
 }

@@ -29,6 +29,8 @@ anonist se para junto al buscador, por fuera y a 8 px de él (el buscador del ba
 
 Con `mascot_style` en `mask`, solo se ve su máscara, flotando: sube y baja sobre una sombra tenue, se desliza sobre el buscador del banner y vuelve, o va a la derecha y vuelve junto al del encabezado, con destellos mientras se mueve. Las caras de cada estado son las mismas.
 
+Con menos de 1024 px de ancho (tablets y teléfonos) se oculta: no hay lugar para ella junto al buscador.
+
 Con *reducir movimiento* activado en el sistema, queda quieta y solo cambia de cuadro con cada estado.
 
 ## Ajustes
