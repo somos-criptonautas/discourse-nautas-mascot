@@ -1,0 +1,46 @@
+From c6c87dbfc270e7f653638dfee59d8f6804ae0f3d Mon Sep 17 00:00:00 2001
+From: satoshinotdead <dev@criptonautas.co>
+Date: Sun, 18 Oct 2026 20:06:20 +0000
+Subject: [PATCH] FIX: mascot size dropdown showed no selection in the theme
+ settings
+
+---
+ AGENTS.md    |  1 +
+ settings.yml | 10 ++++++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 0eb9962..ee4f6bc 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -44,4 +44,5 @@ Add conventions and gotchas you discover to this file, in the same PR.
+ - The eyes follow the cursor (`--eyes-left`/`--eyes-right`, idle only) from one passive `pointermove` listener; only `clientX` is read, nothing is kept. Off with reduced motion. The header mascot is mirrored, so the side is swapped there.
+ - Run lint on the host (`pnpm` 10, as `packageManager` pins); the container's pnpm 12 rewrites `pnpm-lock.yaml` and its type check crashes.
+ - `sit`, `sit-blink` and `scratch-a`/`-b` are drawn for the community-sidebar mascot of `somos-criptonautas/ghost-headline-theme-nautas`, which copies `docs/anonist-sprite.svg` to its `assets/images/`; this component doesn't show them. Copy the sprite there again after changing frames.
++- Numeric `enum` settings take integer `choices` and `default` in `settings.yml`: the admin dropdown casts choices to integers, so quoted ones never match the saved value and it shows empty.
+ - To run CI locally: the `discourse/discourse_test:slim-browsers` image (what [dv](https://github.com/discourse/dv) builds on) with the steps of `discourse/.github`'s `discourse-theme.yml`; set `CI=1` so Chrome starts with `--no-sandbox`.
+diff --git a/settings.yml b/settings.yml
+index 2fc6d0c..671f6a5 100644
+--- a/settings.yml
++++ b/settings.yml
+@@ -7,11 +7,13 @@ search_locations:
+     - welcome-banner
+ mascot_size:
+   type: enum
+-  default: "48"
++  # integers, not strings: the admin dropdown casts choices to integers, so string ones never
++  # match the saved value and it shows empty
++  default: 48
+   choices:
+-    - "32"
+-    - "40"
+-    - "48"
++    - 32
++    - 40
++    - 48
+ mascot_style:
+   type: enum
+   default: figure
+-- 
+2.43.0
+

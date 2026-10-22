@@ -1,0 +1,102 @@
+From 657ef5f1507d5c9b6857a3ab1ac5af25787720b7 Mon Sep 17 00:00:00 2001
+From: satoshinotdead <dev@criptonautas.co>
+Date: Mon, 19 Oct 2026 15:49:26 +0000
+Subject: [PATCH] FIX: hide the mascot on tablets and phones, where there's no
+ room for it
+
+---
+ AGENTS.md                       |  1 +
+ README.es.md                    |  2 ++
+ README.md                       |  2 ++
+ common/common.scss              | 17 +++++++++++++++++
+ spec/system/screenshots_spec.rb |  8 ++++++++
+ 5 files changed, 30 insertions(+)
+
+diff --git a/AGENTS.md b/AGENTS.md
+index ee4f6bc..342ce63 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -44,5 +44,6 @@ Add conventions and gotchas you discover to this file, in the same PR.
+ - The eyes follow the cursor (`--eyes-left`/`--eyes-right`, idle only) from one passive `pointermove` listener; only `clientX` is read, nothing is kept. Off with reduced motion. The header mascot is mirrored, so the side is swapped there.
+ - Run lint on the host (`pnpm` 10, as `packageManager` pins); the container's pnpm 12 rewrites `pnpm-lock.yaml` and its type check crashes.
+ - `sit`, `sit-blink` and `scratch-a`/`-b` are drawn for the community-sidebar mascot of `somos-criptonautas/ghost-headline-theme-nautas`, which copies `docs/anonist-sprite.svg` to its `assets/images/`; this component doesn't show them. Copy the sprite there again after changing frames.
++- Below core's `lg` breakpoint (1024 px, `viewport.until(lg)` at the end of `common.scss`) the mascot is hidden and the banner's reserved margin and the figure's floor are dropped; there's no room beside the field there. Check 1024 px after any placement change, the narrowest width that shows it.
+ - Numeric `enum` settings take integer `choices` and `default` in `settings.yml`: the admin dropdown casts choices to integers, so quoted ones never match the saved value and it shows empty.
+ - To run CI locally: the `discourse/discourse_test:slim-browsers` image (what [dv](https://github.com/discourse/dv) builds on) with the steps of `discourse/.github`'s `discourse-theme.yml`; set `CI=1` so Chrome starts with `--no-sandbox`.
+diff --git a/README.es.md b/README.es.md
+index b02d07d..e9430f9 100644
+--- a/README.es.md
++++ b/README.es.md
+@@ -29,6 +29,8 @@ anonist se para junto al buscador, por fuera y a 8 px de él (el buscador del ba
+ 
+ Con `mascot_style` en `mask`, solo se ve su máscara, flotando: sube y baja sobre una sombra tenue, se desliza sobre el buscador del banner y vuelve, o va a la derecha y vuelve junto al del encabezado, con destellos mientras se mueve. Las caras de cada estado son las mismas.
+ 
++Con menos de 1024 px de ancho (tablets y teléfonos) se oculta: no hay lugar para ella junto al buscador.
++
+ Con *reducir movimiento* activado en el sistema, queda quieta y solo cambia de cuadro con cada estado.
+ 
+ ## Ajustes
+diff --git a/README.md b/README.md
+index a71b1bf..b723efe 100644
+--- a/README.md
++++ b/README.md
+@@ -29,6 +29,8 @@ anonist stands next to the field, outside it with a clear 8 px gap (the banner f
+ 
+ With `mascot_style` set to `mask`, only his mask shows, floating: it bobs over a faint shadow, glides along above the banner field and back, or drifts right and back beside the header one, with sparkles while it moves. The faces for each state are the same.
+ 
++Below 1024 px wide (tablets and phones) it's hidden: there's no room for it beside the field.
++
+ With *reduce motion* turned on in the system, it stays still and only changes frame on state changes.
+ 
+ ## Settings
+diff --git a/common/common.scss b/common/common.scss
+index 8326c80..17e35c3 100644
+--- a/common/common.scss
++++ b/common/common.scss
+@@ -1,3 +1,5 @@
++@use "lib/viewport";
++
+ // Frames are stacked in one SVG; each state shows exactly one. Steps only, never tweens.
+ $size: #{$mascot_size}px;
+ $cycle: 6s;
+@@ -591,3 +593,18 @@ $gap: var(
+     translate: 0 0;
+   }
+ }
++
++// no room for him on tablets and phones: hidden, and the banner keeps its own layout
++@include viewport.until(lg) {
++  .nautas-mascot {
++    display: none;
++  }
++
++  .search-menu:has(.search-input--welcome-banner.nautas-mascot-host) {
++    margin-block-start: 0;
++  }
++
++  .search-input.nautas-mascot-host:has(.nautas-mascot--figure)::after {
++    content: none;
++  }
++}
+diff --git a/spec/system/screenshots_spec.rb b/spec/system/screenshots_spec.rb
+index c2d87ae..29b413f 100644
+--- a/spec/system/screenshots_spec.rb
++++ b/spec/system/screenshots_spec.rb
+@@ -43,6 +43,14 @@ RSpec.describe "Screenshots" do
+     end
+   end
+ 
++  it "hides the mascot on tablets, where there's no room for it" do
++    resize_window(width: 800, height: 1000) do
++      visit "/"
++      expect(page).to have_css(".search-input--welcome-banner.nautas-mascot-host")
++      expect(page).to have_no_css(".search-input--welcome-banner .nautas-mascot", visible: true)
++    end
++  end
++
+   it "shows the mask style in the search field" do
+     component.update_setting(:mascot_style, "mask")
+     component.save!
+-- 
+2.43.0
+
