@@ -65,6 +65,8 @@ EYES = {
     "look": ["....@@###@@@@@@@###@@...", "....@@@###@@@@@@###@...."],
     "up": ["....@@###@@@@@@@###@@...", "....@@@@@@@@@@@@@@@@...."],
     "wink": ["....@@###@@@@@@@@@@@@...", "....@#####@@@@#####@...."],
+    # smiling: both eyes closed upward, as arches
+    "happy": ["....@@###@@@@@@###@@@...", "....@#@@@#@@@@#@@@#@...."],
     # following the cursor: the whole eye 1 px to a side
     "left": ["....@###@@@@@@@###@@@...", "....#####@@@@#####@@...."],
     "right": ["....@@@###@@@@@@@###@...", "....@@#####@@@@#####...."],
@@ -184,6 +186,7 @@ FRAMES = {
     "look": dict(eyes="look", legs="stand"),
     "think": dict(eyes="up", legs="stand"),
     "wink": dict(eyes="wink", legs="stand"),
+    "smile": dict(eyes="happy", legs="stand"),
     "eyes-left": dict(eyes="left", legs="stand"),
     "eyes-right": dict(eyes="right", legs="stand"),
     "walk-a": dict(eyes="open", legs="step-a"),
@@ -340,6 +343,7 @@ MASK_FRAMES = {
     "look": dict(kind="front", eyes="look"),
     "think": dict(kind="front", eyes="up"),
     "wink": dict(kind="front", eyes="wink"),
+    "smile": dict(kind="front", eyes="happy"),
     "eyes-left": dict(kind="front", eyes="left"),
     "eyes-right": dict(kind="front", eyes="right"),
     "turn-a": dict(kind="turn-a"),
